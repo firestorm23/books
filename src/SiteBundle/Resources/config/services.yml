@@ -1,0 +1,26 @@
+services:
+
+    helper_twig_extension:
+        class: SiteBundle\Extension\HelperExtension
+        tags: [{ name: 'twig.extension' }]
+        arguments: [@service_container ]
+
+
+    site.upload.listener:
+        class: SiteBundle\EventListener\UploadListener
+        arguments: [@vich_uploader.metadata_reader, @jms_serializer, @kernel]
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate, method: preUpdate, alias: site_pre_update, priority: -1 }
+            - { name: doctrine.event_listener, event: prePersist, method: prePersist, alias: site_pre_update, priority: -1 }
+
+    site.admin.book:
+        class: SiteBundle\Admin\BookAdmin
+        arguments: [~, SiteBundle\Entity\Book, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Book }
+
+    site.admin.category:
+        class: SiteBundle\Admin\CategoryAdmin
+        arguments: [~, SiteBundle\Entity\Category, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Category }

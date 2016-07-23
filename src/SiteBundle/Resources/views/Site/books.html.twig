@@ -1,0 +1,31 @@
+<div class="table-title">
+<h3>Книги в категории {{ currentCategory.name }}</h3>
+</div>
+<table class="table-fill">
+    <thead>
+    <tr>
+        <th class="text-left">Название</th>
+        <th class="text-left">Когда опубликована</th>
+        <th class="text-left">Описание</th>
+        <th class="text-left">Скачать файл</th>
+        <th class="text-left">Категории</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for book in books %}
+        <tr>
+            <td class="text-left">{{ book.name }}</td>
+            <td class="text-left">{{ book.datePublished | format_date(null, 'ru', 'Europe/Moscow', constant('IntlDateFormatter::MEDIUM')) }}</td>
+            <td class="text-left">{{ book.description | raw }}</td>
+            <td class="text-left"><a target="_blank " href="{{ book.file | raw }}">{{ book.file | raw }}</a></td>
+            <td class="text-left">
+                {% for cat in book.categories %}
+                    <a href="{{ path('category', {'category':cat.id}) }}">{{ cat }}</a>
+                    <br>
+                {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{{ knp_pagination_render(pagination) }}

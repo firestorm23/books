@@ -1,0 +1,35 @@
+{% extends "SiteBundle::public.html.twig" %}
+
+
+{% block content %}
+
+    {% if categories is not empty %}
+        <div class="table-title">
+            <h3>Категории</h3>
+        </div>
+        <table class="table-fill">
+            <thead>
+            <tr>
+                <th class="text-left">Название</th>
+                <th class="text-left">Когда добавили</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cat in categories %}
+                <tr>
+                    <td class="text-left"><a href="{{ path('category', {category: cat.id}) }}">{{ cat.name }}</a></td>
+                    <td class="text-left">{{ cat.dateAdded | format_date(null, 'ru', 'Europe/Moscow', constant('IntlDateFormatter::MEDIUM')) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    {% if books is not empty  %}
+        <div id="book-container">
+        {%  include'SiteBundle:Site:books.html.twig' with
+        {'books':books, 'pagination':pagination, 'currentCategory':currentCategory} %}
+        </div>
+    {% endif %}
+
+{% endblock content %}
